@@ -1,66 +1,54 @@
-# Cloudflare DDNS for UniFi OS
+<img src="https://www.cloudflare.com/img/logo-cloudflare.svg" width="150">  
 
-A Cloudflare Worker script that provides a UniFi-compatible DDNS API to dynamically update the IP address of a DNS A record.
+# Cloudflare DDNS - UniFi OS
 
-## Why?
+`UnFi OS` has in-built support for DDNS for WAN connections but `Cloudflare` is not supported OOTB. This Cloudflare Worker is designed to provide the intermediary support required to allow `UnFi OS` to update Cloudflare using the OOTB options.
 
-UniFi Dream Machine Pro (UDM-Pro) or UniFi Security Gateway (USG) users may need to update Cloudflare domain name DNS records when their public IP address changes. UniFi does not natively support Cloudflare as a DDNS provider.
+This Cloudflare Worker accepts parameters specified under `Settings > Internet > WAN > Dynamic DNS > custom` which `UniFi OS` uses to call whenever an IP change is detected. The Cloudflare Worker then calls Cloudflare DNS API to update the specified DNS A record with the new IP address.
 
-### Configuring Cloudflare
+## Cloudflare requirements
 
-Ensure you have a Cloudflare account and your domain is configured to point to Cloudflare nameservers.
+You need to be using Cloudflare for you domain which means using Cloudflare nameservers and managing your domains DNS within Cloudflare.
 
-#### Install With Click To Deploy
+## Install with Cloudflare Worker `Click to Deploy`
 
-1. Deploy the Worker: [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/workerforce/unifi-ddns)
-2. Navigate to the Cloudflare Workers dashboard.
-3. After deployment, note the `\*.workers.dev` route.
-4. Create an API token to update DNS records: 
-   - Go to https://dash.cloudflare.com/profile/api-tokens.
-   - Click "Create token", select "Create Custom Token".
-   - Choose **Zone:DNS:Edit** for permissions, and include your zone under "Zone Resources". 
-   - Copy your API Key for later use in UniFi OS Controller configuration.
+1. Deploy the Worker - [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/workerforce/unifi-ddns)
+2. In the Cloudflare Workers dashboard - note the `\*.workers.dev` URL
+4. Create a Cloudflare API token to update DNS records - 
+   - `https://dash.cloudflare.com/profile/api-tokens`
+   - Click `Create token`, select `Create custom token`
+   - Choose `**Zone:DNS:Edit**` for permissions, and include your zone under `Zone Resources` 
+   - Copy the API Key which will be used later
 
-#### Install With Wrangler CLI
+## Install with Cloudflare Wrangler CLI
 
-1. Clone or download this project.
-2. Ensure you have [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/) installed.
-3. Log in with Wrangler and run `wrangler deploy`.
-4. Note the `\*.workers.dev` route after creation.
-5. Create an API token as described above.
+1. Clone or download this project
+2. Ensure you have `Cloudflare [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/)` installed
+3. Log in with Cloudlfare Wrangler and run `wrangler deploy`
+4. Note the `\*.workers.dev` URL after creation
+5. Create an API token mentioned above
 
-### Configuring UniFi OS
+## Configuring UniFi OS
 
-1. Log in to your [UniFi OS Controller](https://unifi.ui.com/).
-2. Navigate to Settings > Internet > WAN and scroll down to **Dynamic DNS**.
-3. Click **Create New Dynamic DNS** and provide:
-   - `Service`: Choose `custom` or `dyndns`.
-   - `Hostname`: Full subdomain and hostname to update (e.g., `subdomain.mydomain.com` or `mydomain.com` for root domain).
-   - `Username`: Domain name containing the record (e.g., `mydomain.com`).
-   - `Password`: Cloudflare API Token.
-   - `Server`: Cloudflare Worker route `<worker-name>.<worker-subdomain>.workers.dev/update?ip=%i&hostname=%h`.
-     - For older UniFi devices, omit the URL path.
-     - Remove `https://` from the URL.
+1. `[UniFi OS Controller](https://unifi.ui.com/)`
+2. Click `Settings > Internet > WAN > Dynamic DNS`
+3. Click `Create New Dynamic DNS` and enter the following parameters -
+   - `Service`: Choose `custom`
+   - `Hostname`: DNS record to update in `subdomain.domain.com` format to update (example - `subdomain.domain.com` or `domain.com` for root)
+   - `Username`: Domain name (example `domain.com`)
+   - `Password`: Cloudflare API Token as created above
+   - `Server`: Cloudflare Worker URL `<worker-name>.<worker-subdomain>.workers.dev/update?ip=%i&hostname=%h`
 
-#### Testing Changes - UDM-Pro
-To test the configuration and force an update on a UDM-Pro:
+## Testing on a UDM-Pro
+Test the setup and force a manual update on a UDM-Pro -
+1. SSH into your the UDM-Pro device
+2. Run `ps aux | grep inadyn`
+3. Note the configuration file path which looks similar to `/run/ddns-eth4-inadyn.conf`
+4. Run `inadyn -n -1 --force -f <config-path>` (example - `inadyn -n -1 --force -f /run/ddns-eth4-inadyn.conf`)
+5. Check the response and Cloudlare DNS or Cloudflare Worker logs
+6. `/var/log/messages` can also be checked error messages
 
-1. SSH into your UniFi device.
-2. Run `ps aux | grep inadyn`.
-3. Note the configuration file path.
-4. Run `inadyn -n -1 --force -f <config-path>` (e.g., `inadyn -n -1 --force -f /run/ddns-eth4-inadyn.conf`).
-5. Check `/var/log/messages` for related error messages.
+## Troubleshooting
 
-#### Testing Changes - USG
-To test the configuration and force an update on a USG:
-
-1. SSH into your USG device.
-2. Run `ls /run/ddclient/` (e.g.: `/run/ddclient/ddclient_eth0.pid`)
-3. Note the pid file path as this will tell you what configuration to use. (e.g.: `ddclient_eth0`)
-4. Run `sudo ddclient -daemon=0 -verbose -noquiet -debug -file /etc/ddclient/<config>.conf` (e.g., `sudo ddclient -daemon=0 -verbose -noquiet -debug -file /etc/ddclient/ddclient_eth0.conf`).
-5. This should output `SUCCESS` when the DNS record is set.
-
-#### Important Notes!
-
-- For subdomains (`sub.example.com`), create an A record manually in Cloudflare dashboard first.
-- If you encounter a hostname resolution error (`inadyn[2173778]: Failed resolving hostname https: Name or service not known`), remove `https://` from the `Server` field.
+- For subdomains (example - `subdomain.domain.com`) - create an A record manually in Cloudflare DNS first.
+- For errors with hostname resolution (`inadyn[2173778]: Failed resolving hostname https: Name or service not known`), remove `https://` from the `Server` field
