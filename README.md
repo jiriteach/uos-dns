@@ -6,6 +6,8 @@
 
 This Cloudflare Worker accepts parameters specified under `Settings > Internet > WAN > Dynamic DNS > custom` which `UniFi OS` uses to call whenever an IP change is detected. The Cloudflare Worker then calls Cloudflare DNS API to update the specified DNS A record with the new IP address.
 
+Based on the implementation from - https://github.com/willswire/unifi-ddns⁠ - Thanks!
+
 ## Cloudflare requirements
 
 You need to be using Cloudflare for you domain which means using Cloudflare nameservers and managing your domains DNS within Cloudflare.
@@ -52,3 +54,4 @@ Test the setup and force a manual update on a UDM-Pro -
 
 - For subdomains (example - `subdomain.domain.com`) - create an A record manually in Cloudflare DNS first.
 - For errors with hostname resolution (`inadyn[2173778]: Failed resolving hostname https: Name or service not known`), remove `https://` from the `Server` field
+- If a second domain is required - `Create New Dynamic DNS` in UniFi OS and use the service `dyndns` with the same setup as above
