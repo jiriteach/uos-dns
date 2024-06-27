@@ -24,7 +24,7 @@ class Cloudflare {
 		const response = await this._fetchWithToken(`zones?name=${name}`);
 		const body = await response.json();
 		if (!body.success || body.result.length === 0) {
-			throw new CloudflareApiException(`Failed to find zone '${name}'`);
+			throw new CloudflareApiException(`Failed To Find Zone - '${name}'`);
 		}
 		return body.result[0];
 	}
@@ -34,7 +34,7 @@ class Cloudflare {
 		const response = await this._fetchWithToken(`zones/${zone.id}/dns_records?name=${name}`);
 		const body = await response.json();
 		if (!body.success || body.result.length === 0) {
-			throw new CloudflareApiException(`Failed to find dns record '${name}'`);
+			throw new CloudflareApiException(`Failed To Find DNS Record - '${name}'`);
 		}
 		return body.result?.filter(rr => rr.type === rrType)[0];
 	}
@@ -50,7 +50,7 @@ class Cloudflare {
 		);
 		const body = await response.json();
 		if (!body.success) {
-			throw new CloudflareApiException("Failed to update dns record");
+			throw new CloudflareApiException("Failed To Update DNS Record");
 		}
 		return body.result[0];
 	}
@@ -71,7 +71,7 @@ function requireHttps(request) {
 	const forwardedProtocol = request.headers.get("x-forwarded-proto");
 
 	if (protocol !== "https:" || forwardedProtocol !== "https") {
-		throw new BadRequestException("Please use a HTTPS connection.");
+		throw new BadRequestException("Please Use HTTPS Connection");
 	}
 }
 
@@ -84,7 +84,7 @@ function parseBasicAuth(request) {
 	const index = decoded.indexOf(":");
 
 	if (index === -1 || /[\0-\x1F\x7F]/.test(decoded)) {
-		throw new BadRequestException("Invalid authorization value.");
+		throw new BadRequestException("Invalid Authorization Token");
 	}
 
 	return {
@@ -102,11 +102,11 @@ async function handleRequest(request) {
 	}
 
 	if (!pathname.endsWith("/update")) {
-		return new Response("Not Found.", { status: 404 });
+		return new Response("Cloudflare Worker - Invalid Call. Not Found!", { status: 404 });
 	}
 
 	if (!request.headers.has("Authorization") && !request.url.includes("token=")) {
-		return new Response("Not Found.", { status: 404 });
+		return new Response("Cloudflare Worker - Invalid Call. Not Found!", { status: 404 });
 	}
 
 	const { username, password } = parseBasicAuth(request);
@@ -127,7 +127,7 @@ async function handleRequest(request) {
    	const ips = ipsParam?.split(",");
 
 	if (!hostnames || hostnames.length === 0 || !ips || ips.length === 0) {
-	        throw new BadRequestException("You must specify both hostname(s) and IP address(es)");
+	        throw new BadRequestException("You Must Specify Both Hostname(s) & IP Address(es)");
 	}
 
 	// Iterate over each IP and update DNS records for all hostnames
