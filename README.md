@@ -1,4 +1,7 @@
+ <p float="left">
 <img src="https://www.cloudflare.com/img/logo-cloudflare.svg" width="150">  
+<img src="https://blog.ui.com/wp-content/uploads/2016/10/unifi-app-logo.png" width="150"> 
+</p>
 
 # Cloudflare DDNS (Dynamic DNS) - UniFi OS
 
