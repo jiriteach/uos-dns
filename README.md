@@ -19,7 +19,7 @@ You need to be using Cloudflare for you domain which means using Cloudflare name
 4. Create a Cloudflare API token to update DNS records - 
    - `https://dash.cloudflare.com/profile/api-tokens`
    - Click `Create token`, select `Create custom token`
-   - Choose `**Zone:DNS:Edit**` for permissions, and include your zone under `Zone Resources` 
+   - Choose `Zone > DNS > Edit` for permissions, and include your zone under `Zone Resources` 
    - Copy the API Key which will be used later
 
 ## Install with Cloudflare Wrangler CLI
@@ -32,7 +32,7 @@ You need to be using Cloudflare for you domain which means using Cloudflare name
 
 ## Configuring UniFi OS
 
-1. `[UniFi OS Controller](https://unifi.ui.com/)`
+1. `https://unifi.ui.com/`
 2. Click `Settings > Internet > WAN > Dynamic DNS`
 3. Click `Create New Dynamic DNS` and enter the following parameters -
    - `Service`: Choose `custom`
