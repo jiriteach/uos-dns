@@ -1,6 +1,6 @@
 <img src="https://www.cloudflare.com/img/logo-cloudflare.svg" width="150">  
 
-# Cloudflare DDNS - UniFi OS
+# Cloudflare DDNS (Dynamic DNS) - UniFi OS
 
 `UnFi OS` has in-built support for DDNS for WAN connections but `Cloudflare` is not supported OOTB. This Cloudflare Worker is designed to provide the intermediary support required to allow `UnFi OS` to update Cloudflare using the OOTB options.
 
