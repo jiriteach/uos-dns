@@ -9,7 +9,7 @@
 
 This Cloudflare Worker accepts parameters specified under `Settings > Internet > WAN > Dynamic DNS > custom` which `UniFi OS` uses to call whenever an IP change is detected. The Cloudflare Worker then calls Cloudflare DNS API to update the specified DNS A record with the new IP address.
 
-Based on the implementation from - https://github.com/willswire/unifi-ddns⁠ - Thanks!
+Based on the implementation from - [https://github.com/willswire/unifi-ddns⁠](https://github.com/willswire/unifi-ddns) - Thanks!
 
 ## Cloudflare requirements
 
