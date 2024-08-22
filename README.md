@@ -11,13 +11,15 @@ This Cloudflare Worker accepts parameters specified under `Settings > Internet >
 
 Based on the implementation from - [https://github.com/willswire/unifi-ddns⁠](https://github.com/willswire/unifi-ddns) - Thanks!
 
+Updated 22-08-2024 - Added Telegram Notifications
+
 ## Cloudflare requirements
 
 You need to be using Cloudflare for you domain which means using Cloudflare nameservers and managing your domains DNS within Cloudflare.
 
-## Install with Cloudflare Worker `Click to Deploy`
+## Install the Cloudflare Worker
 
-1. Deploy the Worker - [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/workerforce/unifi-ddns)
+1. Deploy the Worker using the Cloudflare dashboard
 2. In the Cloudflare Workers dashboard - note the `\*.workers.dev` URL
 4. Create a Cloudflare API token to update DNS records - 
    - `https://dash.cloudflare.com/profile/api-tokens`
@@ -32,6 +34,14 @@ You need to be using Cloudflare for you domain which means using Cloudflare name
 3. Log in with Cloudlfare Wrangler and run `wrangler deploy`
 4. Note the `\*.workers.dev` URL after creation
 5. Create an API token mentioned above
+
+## Telegram Notifications
+
+The latest updated included Telegram notifications. Two environment variables are required for this to work. 
+1. `telegramBotToken`
+2. `telegramChatId`
+
+These need to be created as environment variables on the Cloudflare Worker.
 
 ## Configuring UniFi OS
 
