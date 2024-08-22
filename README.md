@@ -37,7 +37,7 @@ You need to be using Cloudflare for you domain which means using Cloudflare name
 
 ## Telegram Notifications
 
-The latest updated included Telegram notifications. Two environment variables are required for this to work. 
+The latest update includes support for Telegram notifications. Two environment variables are required for this to work. 
 1. `telegramBotToken`
 2. `telegramChatId`
 
