@@ -113,7 +113,7 @@ async function handleRequest(request) {
   }
   for (const ip of ips) {
     await informAPI(hostnames, ip.trim(), username, token);
-    await sendTelegramMessage("Cloudflare Worker\n-- uos-dns.se7en.co.nz\n\nUDM Pro\nIP Update Detected ...\n\nIP - " + ip.trim() + "\nDNS Name - " + hostnames);
+    await sendTelegramMessage("-----------------------------------------\nCloudflare Worker - uos-dns.se7en.co.nz\nDNS Updater\n-----------------------------------------\n\nUDM Pro - IP Update Detected!\n\n-- IP --\n" + ip.trim() + "\n\nName - " + hostnames);
   }
   return new Response("good", {
     status: 200,
