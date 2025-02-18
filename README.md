@@ -1,10 +1,11 @@
+### NOTE - The latest version of Unifi Network Application 9.1.92 now supports Cloudflare as a Dynamic DNS provider so this is no longer required.
+<br/>
+
  <p float="left">
 <img src="https://www.cloudflare.com/img/logo-cloudflare.svg" width="150">  
 </p>
 
 # Cloudflare DDNS (Dynamic DNS) - UniFi OS
-
-### NOTE - The latest version of Unifi Network Application 9.1.92 supports Cloudflare as Dynamic DNS so this is no longer required.
 
 `UnFi OS` has in-built support for DDNS for WAN connections but `Cloudflare` is not supported OOTB. This Cloudflare Worker is designed to provide the intermediary support required to allow `UnFi OS` to update Cloudflare using the OOTB options.
 
